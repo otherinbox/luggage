@@ -34,8 +34,8 @@ f = Luggage.new(:server => ['imap.aol.com' 993, true], :authenticate => 'LOGIN u
 ```
 
 Notice that the value of `:server` will be passed to `Net::IMAP#new`, so the full
-syntax of the initializer is available.  See the Ruby docs for more details on
-auth and intialization
+syntax of the initializer is available.  See [the Ruby docs](http://rubydoc.info/stdlib/net/Net/IMAP)
+for more details on auth and intialization
 
 ### Using XOauth
 
