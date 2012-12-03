@@ -54,8 +54,12 @@ module Luggage
       instance_eval &block if block_given?
     end
 
-    def raw_message
-      mail.to_s
+    # Formatted to save to file
+    #
+    # Mail::Message.new( message.to_s ).raw_source = message.to_s
+    #
+    def to_s
+      mail.encoded
     end
 
     # Fetch this message from the server and update all its attributes
@@ -109,6 +113,12 @@ module Luggage
     end
 
     private
+
+    # Formatted to upload to IMAP server
+    #
+    def raw_message
+      mail.to_s
+    end
 
     def mail
       reload unless @mail.present?
