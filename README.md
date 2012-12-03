@@ -1,7 +1,7 @@
 # Luggage
 
-* {Homepage}[https://github.com/otherinbox/luggage#readme]
-* {Issues}[https://github.com/otherinbox/luggage/issues]
+* [Homepage](https://github.com/otherinbox/luggage#readme)
+* [Issues](https://github.com/otherinbox/luggage/issues)
 
 DSL for interacting with Imap accounts
 
