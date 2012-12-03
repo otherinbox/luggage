@@ -5,6 +5,45 @@
 
 DSL for interacting with Imap accounts
 
+## Install
+
+Nothing fancy - in you Gemfile;
+
+``` ruby
+gem 'luggage'
+```
+
+That was easy, right?
+
+
+## Before we get started...
+
+Many of the following examples use a DSL/block style syntax.  Most of the object 
+initializers accept a block and do an `instance_eval` on the new object 
+if a block is passed.  These three examples are equivalent:
+
+``` ruby
+Luggage.new :connection => c do
+  mailboxes "INBOX" do
+    message do
+      template "path/to/foo.eml"
+    end.save!
+  end
+end
+```
+
+``` ruby
+f = Luggage.new(:connection => c)
+mb = f.maiboxes["INBOX"]
+m = mb.message(:template => "path/to/foo.eml")
+m.save!
+```
+
+``` ruby
+Luggage.new(:connection => c).mailboxes["INBOX"].message(:template => "path/to/foo.eml").save!
+```
+
+
 ## Creating a factory
 
 Factories provide the top-level interface for interacting with IMAP servers.
@@ -180,19 +219,3 @@ Luggage.new(:connection => c) do
   end
 end
 ```
-
-## If you don't like playing with blocks
-
-The examples so far have used DSL/block style syntax.  If you'd prefer to assign to
-variables and use the methods directly that's fine too:
-
-``` ruby
-f = Luggage.new(:connection => c)
-mb = f.maiboxes["INBOX"]
-m = mb.message(:template => "path/to/foo.eml")
-m.save!
-
-Luggage.new(:connection => c).mailboxes["INBOX"].message(:template => path).save!
-```
-
-Enjoy!
