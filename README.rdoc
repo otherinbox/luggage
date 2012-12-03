@@ -1,0 +1,28 @@
+= luggage
+
+* {Homepage}[https://github.com/kerinin/luggage#readme]
+* {Issues}[https://github.com/kerinin/luggage/issues]
+* {Documentation}[http://rubydoc.info/gems/luggage/frames]
+* {Email}[mailto:kerinin at gmail.com]
+
+== Description
+
+TODO: Description
+
+== Features
+
+== Examples
+
+  require 'luggage'
+
+== Requirements
+
+== Install
+
+  $ gem install luggage
+
+== Copyright
+
+Copyright (c) 2012 Ryan Michael
+
+See LICENSE.txt for details.
