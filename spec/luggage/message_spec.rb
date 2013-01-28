@@ -23,7 +23,7 @@ describe Luggage::Message do
       context "with #{method} passed as argument" do
         it "sets #{method} on Mail object" do
           message = Luggage::Message.new_local(connection, :mailbox, method => "string")
-          expect(message.raw_message).to match(/string/)
+          expect(message.to_s).to match(/string/)
         end
       end
     end
@@ -138,14 +138,9 @@ describe Luggage::Message do
     end
   end
 
-  describe "#raw_message" do
-    it "calls Mail#to_s" do
-      Mail::Message.any_instance.should_receive(:to_s)
-      message.raw_message
-    end
-
+  describe "#to_s" do
     it "returns a string" do
-      expect(message.raw_message).to be_a(String)
+      expect(message.to_s).to be_a(String)
     end
   end
 
