@@ -1,6 +1,6 @@
 #Changes
 
-## Unreleased
+## 1.1.1
 
 * Fix bug when trying to use XOAUTH to authenticate. - Ben Hamill
 * Remove several cases of excessive argument type checking. - Ben Hamill
