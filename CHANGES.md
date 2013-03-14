@@ -1,6 +1,6 @@
 #Changes
 
-## Unreleased
+## 1.2.0
 
 * Add `Message#copy_to!`. - Ben Hamill
 
