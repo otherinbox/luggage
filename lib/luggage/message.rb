@@ -40,16 +40,12 @@ module Luggage
     # `args[:message_id]` use this as for the Message-ID header.  This header is used to identify messages across requests
     #
     def initialize(connection, mailbox, args = {}, &block)
-      raise ArgumentError, "Net::IMAP connection required" unless connection.kind_of?(Net::IMAP)
-
       @connection = connection
       @mailbox = mailbox.kind_of?(Mailbox) ? mailbox : Mailbox.new(connection, mailbox)
       @flags = []
       @date = args[:date] || Time.now
       @template = args[:template]
       @message_id = args[:message_id] || "<#{UUIDTools::UUID.random_create}@test.oib.com>"
-
-      raise ArgumentError, "mailbox requried" unless @mailbox.present?
 
       instance_eval &block if block_given?
     end

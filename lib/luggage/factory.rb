@@ -27,7 +27,7 @@ module Luggage
 
       elsif args.has_key?(:server) && args.has_key?(:xoauth)
         @connection = Net::IMAP.new(*Array(args[:server]))
-        @connection.authenticate('XOAUTH', *Array(args[:xoauth]))
+        @connection.send(:send_command, "AUTHENTICATE XOAUTH #{Array(args[:xoauth]).join(' ')}")
 
       elsif args.has_key?(:server) && args.has_key?(:login)
         @connection = Net::IMAP.new(*Array(args[:server]))

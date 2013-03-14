@@ -15,10 +15,6 @@ describe Luggage::Message do
       expect(Luggage::Message.new_local(connection, "Inbox")).to be_a(Luggage::Message)
     end
 
-    it "raises ArgumentError if Luggage::Mailbox isn't passed" do
-      expect{ Luggage::Message.new_local() }.to raise_error(ArgumentError)
-    end
-
     [:subject, :body, :to].each do |method|
       context "with #{method} passed as argument" do
         it "sets #{method} on Mail object" do
@@ -55,10 +51,6 @@ describe Luggage::Message do
 
     it "sets connection" do
       expect(Luggage::Message.new(connection, :mailbox).connection).to eq(connection)
-    end
-
-    it "requires a connection" do
-      expect { Luggage::Message.new(:not_a_connection, :mailbox).connection }.to raise_error(ArgumentError)
     end
 
     it "sets mailbox if Mailbox passed" do

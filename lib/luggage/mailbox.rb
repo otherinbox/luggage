@@ -11,9 +11,6 @@ module Luggage
     # `name` is the name of the remote mailbox
     #
     def initialize(connection, name, &block)
-      raise ArgumentError, "Net::IMAP connection required" unless connection.kind_of?(Net::IMAP)
-      raise ArgumentError, "name required" unless name.present?
-
       @connection = connection
       @name = name
 

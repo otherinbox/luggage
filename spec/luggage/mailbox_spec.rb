@@ -15,10 +15,6 @@ describe Luggage::Mailbox do
       expect(Luggage::Mailbox.new(connection, :mailbox).connection).to eq(connection)
     end
 
-    it "requires a connection" do
-      expect { Luggage::Mailbox.new(:foo, :mailbox).connection }.to raise_error(ArgumentError)
-    end
-
     it "sets the name" do
       expect(Luggage::Mailbox.new(connection, :mailbox).name).to eq(:mailbox)
     end

@@ -18,6 +18,11 @@ describe Luggage::Factory do
       expect(Luggage.new(:server => :foo, :xoauth => "token").connection).to be_a(Net::IMAP)
     end
 
+    it "accepts :server and :login, and creates a connection" do
+      Net::IMAP.any_instance.stub(:login).and_return(true)
+      expect(Luggage.new(:server => :foo, :login => %w(username password)).connection).to be_a(Net::IMAP)
+    end
+
     it "requires a way to build a connection" do
       expect { Luggage.new }.to raise_error(ArgumentError)
     end
