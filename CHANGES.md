@@ -1,5 +1,9 @@
 #Changes
 
+## Unrelease
+
+* Protect against trying to UID FETCH an empty list of UIDs. - Ben Hamill
+
 ## 1.2.0
 
 * Add `Message#copy_to!`. - Ben Hamill
