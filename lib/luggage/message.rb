@@ -36,7 +36,7 @@ module Luggage
     # `connection` should be an authenticated Imap connection
     # `mailbox` should be either a Mailbox or a string describing a remote mailbox
     # `args[:date]` when this message is appended to the remote server, this is the date which will be used
-    # `args[:template]` use this file as the initial raw email content.  
+    # `args[:template]` use this file as the initial raw email content.
     # `args[:message_id]` use this as for the Message-ID header.  This header is used to identify messages across requests
     #
     def initialize(connection, mailbox, args = {}, &block)
@@ -87,10 +87,10 @@ module Luggage
     #
     def exists?
       mailbox.select!
-      connection.uid_search("HEADER Message-ID #{message_id}").present?
+      connection.uid_search("HEADER Message-ID #{message_id}")
     end
 
-    # Proxy all other methods to this instance's Mail::Message 
+    # Proxy all other methods to this instance's Mail::Message
     #
     def method_missing(meth, *args, &block)
        if mail.respond_to?(meth)
@@ -117,16 +117,15 @@ module Luggage
     end
 
     def mail
-      reload unless @mail.present?
+      reload if @mail.nil?
       @mail
     end
 
     def uid
-      unless @uid.present?
-        mailbox.select!
-        @uid = fetch_uid
-      end
-      @uid
+      return @uid if instance_variable_defined?(:@uid)
+
+      mailbox.select!
+      @uid = fetch_uid
     end
 
     def fetch_uid

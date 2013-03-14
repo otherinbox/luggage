@@ -27,7 +27,7 @@ shared_context "factories" do
       :attr => {
         "BODY[]" => "raw_body",
         "FLAGS" => [],
-        "INTERNALDATE" => (Time.now.to_i - 60 * 60 * 24).to_s
+        "INTERNALDATE" => (Time.now - 60 * 60 * 24).to_s
       }
     }])
     c.stub(:uid_search).and_return([1])

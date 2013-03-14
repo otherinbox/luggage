@@ -62,7 +62,7 @@ describe Luggage::Message do
     end
 
     it "sets date if passed" do
-      date = 2.days.ago
+      date = Date.today - 2
       expect(Luggage::Message.new(connection, :mailbox, :date => date).date).to eq(date)
     end
 
@@ -90,7 +90,7 @@ describe Luggage::Message do
     it "fetches raw email" do
       connection.should_receive(:uid_fetch).
         with([1], ["FLAGS", "INTERNALDATE", "BODY.PEEK[]"]).
-        and_return( [{:attr => {"BODY[]" => "raw_body", "FLAGS" => [], "INTERNALDATE" => 1.day.ago.to_s}}]  )
+        and_return( [{:attr => {"BODY[]" => "raw_body", "FLAGS" => [], "INTERNALDATE" => (Time.now - 60 * 60 * 24).to_s}}]  )
 
       message.reload
     end
@@ -98,7 +98,7 @@ describe Luggage::Message do
     it "fetches flags" do
       connection.should_receive(:uid_fetch).
         with([1], ["FLAGS", "INTERNALDATE", "BODY.PEEK[]"]).
-        and_return( [{:attr => {"BODY[]" => "raw_body", "FLAGS" => [], "INTERNALDATE" => 1.day.ago.to_s}}]  )
+        and_return( [{:attr => {"BODY[]" => "raw_body", "FLAGS" => [], "INTERNALDATE" => (Time.now - 60 * 60 * 24).to_s}}]  )
 
       message.reload
     end
@@ -120,7 +120,7 @@ describe Luggage::Message do
     end
 
     it "appends message to mailbox" do
-      message_date = 2.days.ago
+      message_date = Date.today - 2
       message.stub(:raw_message).and_return("Random Content")
       message.stub(:flags).and_return([:Seen])
       message.stub(:date).and_return(message_date)
