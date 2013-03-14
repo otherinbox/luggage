@@ -4,31 +4,41 @@ module Luggage
 
     # Factory
     #
-    # Factories require an instance of Net::IMAP.  Serveral methods are supported:
+    # Factories require an instance of Net::IMAP. Serveral methods are supported:
     #
     # Factory.new(:connection => connection)
-    # In this case, `connection` should be an authorized Net::IMAP instance
+    # In this case, `connection` should be an authorized Net::IMAP instance.
     #
-    # Factory.new(:server => "imap.example.com", :authentication => "LOGIN username password")
-    # In this case, we'll build a Net::IMAP instance and attempt to authenticate with the
-    # value of `authentication`.  Net::IMAP supports LOGIN and CRAM-MD5 natively - see below
-    # for xoauth
+    # Factory.new(:server => "imap.gmail.com", :xoauth => [token, string])
+    # In this case we'll build a Net::IMAP instance and attempt to send a raw
+    # XOAUTH authentication request using the supplied token.
     #
-    # Factory.new(:server => "imap.gmail.com", :xoauth => "xoauth token string")
-    # In this case we'll build a Net::IMAP instance and attempt to send a raw XOAUTH authentication
-    # request using the supplied token.
+    # Factory.new(:server => 'imap.example.com', :login => [username, password])
+    # In this case, we'll build a Net::IMAP instance and use the `#login` method
+    # to authenticate. This isn't the same as using 'LOGIN' as the auth method
+    # in the next example.
     #
+    # Factory.new(:server => "imap.example.com", :authentication => [some_auth_method, appropriate, arguments])
+    # In this case, we'll build a Net::IMAP instance and attempt to authenticate
+    # with the value of `:authentication` by calling `Net::IMAP#authenticate`.
     def initialize(args = {}, &block)
       if args.has_key?(:connection)
         @connection = args[:connection]
-      elsif args.has_key?(:server) && args.has_key?(:authenticate)
-        @connection = Net::IMAP.new(*Array(args[:server]))
-        @connection.authenticate(*args[:authenticate])
+
       elsif args.has_key?(:server) && args.has_key?(:xoauth)
         @connection = Net::IMAP.new(*Array(args[:server]))
-        @connection.send(:send_command, "AUTHENTICATE XOAUTH #{args[:xoauth]}")
+        @connection.authenticate('XOAUTH', *Array(args[:xoauth]))
+
+      elsif args.has_key?(:server) && args.has_key?(:login)
+        @connection = Net::IMAP.new(*Array(args[:server]))
+        @connection.login(*Array(args[:login]))
+
+      elsif args.has_key?(:server) && args.has_key?(:authenticate)
+        @connection = Net::IMAP.new(*Array(args[:server]))
+        @connection.authenticate(*Array(args[:authenticate]))
+
       else
-        raise ArgumentError, "Imap Connection required."
+        raise ArgumentError, 'Imap Connection required.'
       end
 
       instance_eval &block if block_given?
