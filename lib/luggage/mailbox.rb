@@ -28,7 +28,9 @@ module Luggage
     # Returns true if this mailbox exists on the remote server, false otherwise
     #
     def exists?
-      @exists ||= connection.list("", name).present?
+      return @exists if instance_variable_defined?(:@exists)
+
+      @exists = !connection.list("", name).empty?
     end
 
     # Deletes this mailbox on the remote server

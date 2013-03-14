@@ -1,7 +1,6 @@
 require 'rspec'
 require 'rspec/mocks'
 require 'rspec/expectations'
-require 'active_support/time'
 require 'pry'
 
 require 'luggage'
@@ -24,7 +23,13 @@ shared_context "factories" do
     c.stub(:select)
     c.stub(:send_command)
     c.stub(:uid_store)
-    c.stub(:uid_fetch).and_return( [{:attr => {"BODY[]" => "raw_body", "FLAGS" => [], "INTERNALDATE" => 1.day.ago.to_s}}]  )
+    c.stub(:uid_fetch).and_return([{
+      :attr => {
+        "BODY[]" => "raw_body",
+        "FLAGS" => [],
+        "INTERNALDATE" => (Time.now.to_i - 60 * 60 * 24).to_s
+      }
+    }])
     c.stub(:uid_search).and_return([1])
     c.stub(:list).and_return([])
     c
