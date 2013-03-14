@@ -4,6 +4,25 @@ module Luggage
 
     attr_reader :connection, :name
 
+    def self.convert_mailbox_name(mailbox_name)
+      case mailbox_name
+      when :g_all
+        "[Gmail]/All Mail"
+      when :g_sent
+        "[Gmail]/Sent"
+      when :g_trash
+        "[Gmail]/Trash"
+      when :inbox, :spam, :sent, :trash
+        mailbox_name.to_s.upcase
+      when Symbol
+        mailbox_name.to_s
+      when String
+        mailbox_name
+      else
+        nil
+      end
+    end
+
     # This provides an interface to a remote Imap mailbox
     #
     # `connection` should be an authenticated Net::IMAP

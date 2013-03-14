@@ -1,5 +1,9 @@
 #Changes
 
+## Unreleased
+
+* Add `Message#copy_to!`. - Ben Hamill
+
 ## 1.1.2
 
 * Remove hidden reliance on ActiveRecord's `#present?` helper. - Ben Hamill

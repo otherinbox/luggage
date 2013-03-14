@@ -7,21 +7,10 @@ module Luggage
     end
 
     def [](*args, &block)
-      case args.first
-      when String
-        mailbox(args.first, &block)
-      when :inbox, :spam, :sent, :trash
-        mailbox(args.first.to_s.upcase, &block)
-      when :g_all
-        mailbox("[Gmail]/All Mail", &block)
-      when :g_sent
-        mailbox("[Gmail]/Sent", &block)
-      when :g_trash
-        mailbox("[Gmail]/Trash", &block)
-      when Symbol
-        mailbox(args.first, &block)
-      when nil
-        mailboxes
+      mailbox_name = Luggage::Mailbox.convert_mailbox_name(args.first)
+
+      if mailbox_name
+        mailbox(mailbox_name, &block)
       else
         super
       end

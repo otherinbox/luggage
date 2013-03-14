@@ -75,6 +75,13 @@ module Luggage
       connection.append(mailbox.name, raw_message, flags.map {|f| f.to_sym.upcase}, date)
     end
 
+    # Uses IMAP's COPY command to copy the message into the named mailbox
+    #
+    def copy_to!(mailbox_name)
+      mailbox.select!
+      connection.uid_copy([uid], Luggage::Mailbox.convert_mailbox_name(mailbox_name))
+    end
+
     # Add the 'Deleted' flag to this message on the remote server
     #
     def delete!
