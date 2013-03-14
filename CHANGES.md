@@ -1,5 +1,9 @@
 #Changes
 
+## 1.1.2
+
+* Remove hidden reliance on ActiveRecord's `#present?` helper. - Ben Hamill
+
 ## 1.1.1
 
 * Fix bug when trying to use XOAUTH to authenticate. - Ben Hamill
