@@ -1,6 +1,6 @@
 #Changes
 
-## Unrelease
+## 1.2.1
 
 * Protect against trying to UID FETCH an empty list of UIDs. - Ben Hamill
 
