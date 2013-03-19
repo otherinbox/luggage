@@ -42,7 +42,7 @@ module Luggage
     def initialize(connection, mailbox, args = {}, &block)
       @connection = connection
       @mailbox = mailbox.kind_of?(Mailbox) ? mailbox : Mailbox.new(connection, mailbox)
-      @flags = []
+      @flags = args.has_key?(:flags) ? Array(args[:flags]) : []
       @date = args[:date] || Time.now
       @template = args[:template]
       @message_id = args[:message_id] || "<#{UUIDTools::UUID.random_create}@test.oib.com>"
@@ -94,7 +94,7 @@ module Luggage
     #
     def exists?
       mailbox.select!
-      connection.uid_search("HEADER Message-ID #{message_id}")
+      connection.uid_search("HEADER.PEEK Message-ID #{message_id}")
     end
 
     # Proxy all other methods to this instance's Mail::Message
@@ -136,14 +136,14 @@ module Luggage
     end
 
     def fetch_uid
-      response = connection.uid_search("HEADER Message-ID #{message_id}")
+      response = connection.uid_search("HEADER.PEEK Message-ID #{message_id}")
       raise MessageNotFoundError if response.empty?
       raise DuplicateMessageError if response.length > 1
       response.first
     end
 
     def fetch_fields
-      response = connection.uid_fetch([uid], ["FLAGS", "INTERNALDATE", "BODY.PEEK[]"])
+      response = connection.uid_fetch([uid], ["FLAGS", "INTERNALDATE.PEEK", "BODY.PEEK[]"])
       raise MessageNotFoundError if response.empty?
       raise DuplicateMessageError if response.length > 1
       response.first[:attr]

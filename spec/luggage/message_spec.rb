@@ -39,6 +39,20 @@ describe Luggage::Message do
         Luggage::Message.new_local(connection, :mailbox, :template =>"base")
       end
     end
+
+    context "with flags passed as argument" do
+      it "sets flags" do
+        message = Luggage::Message.new_local(connection, :mailbox, :flags => :Seen)
+        expect(message.flags).to include(:Seen)
+      end
+    end
+
+    context "with flags array passed as argument" do
+      it "sets flags" do
+        message = Luggage::Message.new_local(connection, :mailbox, :flags => [:Seen])
+        expect(message.flags).to include(:Seen)
+      end
+    end
   end
 
   describe "::new" do
@@ -89,7 +103,7 @@ describe Luggage::Message do
 
     it "fetches raw email" do
       connection.should_receive(:uid_fetch).
-        with([1], ["FLAGS", "INTERNALDATE", "BODY.PEEK[]"]).
+        with([1], ["FLAGS", "INTERNALDATE.PEEK", "BODY.PEEK[]"]).
         and_return( [{:attr => {"BODY[]" => "raw_body", "FLAGS" => [], "INTERNALDATE" => (Time.now - 60 * 60 * 24).to_s}}]  )
 
       message.reload
@@ -97,7 +111,7 @@ describe Luggage::Message do
 
     it "fetches flags" do
       connection.should_receive(:uid_fetch).
-        with([1], ["FLAGS", "INTERNALDATE", "BODY.PEEK[]"]).
+        with([1], ["FLAGS", "INTERNALDATE.PEEK", "BODY.PEEK[]"]).
         and_return( [{:attr => {"BODY[]" => "raw_body", "FLAGS" => [], "INTERNALDATE" => (Time.now - 60 * 60 * 24).to_s}}]  )
 
       message.reload
@@ -165,7 +179,7 @@ describe Luggage::Message do
 
     it "searches for message with message_id" do
       message.stub(:message_id).and_return("<foo@example.com>")
-      connection.should_receive(:uid_search).with("HEADER Message-ID <foo@example.com>").and_return([1])
+      connection.should_receive(:uid_search).with("HEADER.PEEK Message-ID <foo@example.com>").and_return([1])
 
       message.exists?
     end
