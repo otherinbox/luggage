@@ -42,9 +42,9 @@ describe Luggage::Factory do
   describe "#mailboxes" do
     before(:each) do
       connection.stub(:list).
-        and_return([ 
-          OpenStruct.new(:name => "Mailbox_1"), 
-          OpenStruct.new(:name => "Mailbox_2"), 
+        and_return([
+          OpenStruct.new(:name => "Mailbox_1"),
+          OpenStruct.new(:name => "Mailbox_2"),
           OpenStruct.new(:name => "Mailbox_3"),
           OpenStruct.new(:name => "Mailbox_4") ])
     end

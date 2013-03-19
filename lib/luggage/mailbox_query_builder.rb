@@ -51,7 +51,7 @@ module Luggage
     def messages
       @messages ||= message_ids.map {|message_id| Message.new(connection, mailbox, :message_id => message_id)}
     end
- 
+
     def inspect
       "#<Luggage::MailboxQueryBuilder server: \"#{host}\", mailbox: \"#{mailbox.name}\", query: #{query}>"
     end
@@ -68,10 +68,17 @@ module Luggage
     end
 
     def message_ids
-      field = "BODY[HEADER.FIELDS (Message-ID)]"
-      @message_ids ||= connection.uid_fetch(uids, field).map do |resp|
-        $1 if resp[:attr][field] =~ /(<\S*@\S*>)/
-      end.compact
+      @message_ids ||= begin
+        field = "BODY[HEADER.FIELDS (Message-ID)]"
+
+        if uids.empty?
+          []
+        else
+          connection.uid_fetch(uids, field).map do |resp|
+            $1 if resp[:attr][field] =~ /(<\S*@\S*>)/
+          end.compact
+        end
+      end
     end
   end
 end
