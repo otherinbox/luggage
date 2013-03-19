@@ -57,9 +57,9 @@ module Luggage
       Message.new_local(connection, mailbox, args, &block)
     end
 
-    def mailboxes(*args)
+    def mailboxes(*args, &block)
       array = MailboxArray.new(connection)
-      args.empty? ? array : array[*args]
+      args.empty? ? array : array[*args, &block]
     end
 
     def inspect

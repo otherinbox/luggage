@@ -84,5 +84,14 @@ describe Luggage::Factory do
         expect(factory.mailboxes[1..2].map(&:name)).to eq(["Mailbox_2", "Mailbox_3"])
       end
     end
+
+    context "with a string argument (function-call syntax) and a block" do
+      it "executes the block in the mailbox's scope" do
+        Luggage::Mailbox.any_instance.should_receive(:message)
+        factory.mailboxes("Mailbox_1") do
+          message
+        end
+      end
+    end
   end
 end
