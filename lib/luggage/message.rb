@@ -72,7 +72,7 @@ module Luggage
     #
     def save!
       mailbox.select!
-      connection.append(mailbox.name, raw_message, flags.map {|f| f.to_sym.upcase}, date)
+      connection.append(mailbox.name, raw_message, flags, date)
     end
 
     # Uses IMAP's COPY command to copy the message into the named mailbox
@@ -136,14 +136,14 @@ module Luggage
     end
 
     def fetch_uid
-      response = connection.uid_search("HEADER.PEEK Message-ID #{message_id}")
+      response = connection.uid_search("HEADER Message-ID #{message_id}")
       raise MessageNotFoundError if response.empty?
       raise DuplicateMessageError if response.length > 1
       response.first
     end
 
     def fetch_fields
-      response = connection.uid_fetch([uid], ["FLAGS", "INTERNALDATE.PEEK", "BODY.PEEK[]"])
+      response = connection.uid_fetch([uid], ["FLAGS", "INTERNALDATE", "BODY.PEEK[]"])
       raise MessageNotFoundError if response.empty?
       raise DuplicateMessageError if response.length > 1
       response.first[:attr]
