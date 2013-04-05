@@ -38,6 +38,18 @@ describe Luggage::Message do
 
         Luggage::Message.new_local(connection, :mailbox, :template =>"base")
       end
+
+      it "uses template's Message-ID if not specified" do
+        Mail.stub(:read).and_return(Mail.new("Message-ID: foo@bar.com"))
+
+        expect( Luggage::Message.new_local(connection, :mailbox, :template =>"base").message_id ).to eq("foo@bar.com")
+      end
+
+      it "respects message_id if passed (and template defines it too)" do
+        Mail.stub(:read).and_return(Mail.new("Message-ID: foo@bar.com"))
+
+        expect( Luggage::Message.new_local(connection, :mailbox, :template =>"base", :message_id => "other@bar.com").message_id ).to eq("other@bar.com")
+      end
     end
 
     context "with flags passed as argument" do
@@ -103,7 +115,7 @@ describe Luggage::Message do
 
     it "fetches raw email" do
       connection.should_receive(:uid_fetch).
-        with([1], ["FLAGS", "INTERNALDATE.PEEK", "BODY.PEEK[]"]).
+        with([1], ["FLAGS", "INTERNALDATE", "BODY.PEEK[]"]).
         and_return( [{:attr => {"BODY[]" => "raw_body", "FLAGS" => [], "INTERNALDATE" => (Time.now - 60 * 60 * 24).to_s}}]  )
 
       message.reload
@@ -111,7 +123,7 @@ describe Luggage::Message do
 
     it "fetches flags" do
       connection.should_receive(:uid_fetch).
-        with([1], ["FLAGS", "INTERNALDATE.PEEK", "BODY.PEEK[]"]).
+        with([1], ["FLAGS", "INTERNALDATE", "BODY.PEEK[]"]).
         and_return( [{:attr => {"BODY[]" => "raw_body", "FLAGS" => [], "INTERNALDATE" => (Time.now - 60 * 60 * 24).to_s}}]  )
 
       message.reload
@@ -139,7 +151,7 @@ describe Luggage::Message do
       message.stub(:flags).and_return([:Seen])
       message.stub(:date).and_return(message_date)
 
-      connection.should_receive(:append).with("Inbox", "Random Content", [:SEEN], message_date)
+      connection.should_receive(:append).with("Inbox", "Random Content", [:Seen], message_date)
       message.save!
     end
   end
