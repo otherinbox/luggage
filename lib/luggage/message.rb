@@ -24,7 +24,12 @@ module Luggage
         args.each do |key, value|
           mail[key] = value if mail.respond_to?(key)
         end
-        mail[:message_id] = message_id
+
+        if mail[:message_id] && !args.has_key?(:message_id)
+          @message_id = mail.message_id
+        else
+          mail[:message_id] = message_id
+        end
       end
 
       message.instance_eval &block if block_given?
